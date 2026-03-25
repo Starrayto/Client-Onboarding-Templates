@@ -9,118 +9,141 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f3f4f6;
+body { font-family: 'Inter', sans-serif; }
+[contenteditable="true"] {
+  outline: 2px dashed transparent;
+  cursor: text;
 }
+[contenteditable="true"]:hover {
+  outline-color: #a5b4fc;
+  background: #f5f6fa;
+}
+.no-print { display:block; }
 
-/* PRINT CLEANUP */
 @media print {
-  body {
-    margin: 0;
-    background: #fff;
-  }
+  .no-print { display:none !important; }
+  body { background:#fff; }
+  * { box-shadow:none !important; }
 }
 </style>
 </head>
 
-<body class="p-6">
+<body class="bg-gray-100 p-6 space-y-12">
 
-<!-- ================= WELCOME ================= -->
-<div id="welcome" class="doc bg-white p-8 rounded-xl shadow max-w-4xl mx-auto mb-10">
-  <h1 class="text-3xl font-bold text-center">WELCOME</h1>
-  <p class="mt-4 text-center">Hi [Client Name],</p>
-
-  <p class="mt-6 text-gray-600 text-center">
-    Thank you for choosing us. We’re excited to work with you.
-  </p>
-
-  <div class="text-center mt-8">
-    <button onclick="printSection('welcome')" class="bg-red-500 text-white px-6 py-2 rounded">
-      Print Welcome
-    </button>
-  </div>
-</div>
-
-<!-- ================= AGREEMENT ================= -->
-<div id="agreement" class="doc bg-white p-8 rounded-xl shadow max-w-4xl mx-auto mb-10">
-  <h1 class="text-3xl font-bold text-center">CLIENT AGREEMENT</h1>
-
-  <p class="mt-6 text-gray-600">
-    This agreement outlines services and payment terms.
-  </p>
-
-  <div class="text-center mt-8">
-    <button onclick="printSection('agreement')" class="bg-red-500 text-white px-6 py-2 rounded">
-      Print Agreement
-    </button>
-  </div>
-</div>
-
-<!-- ================= GUIDE ================= -->
-<div id="guide" class="doc bg-white p-8 rounded-xl shadow max-w-4xl mx-auto mb-10">
-  <h1 class="text-3xl font-bold text-center">CONTENT GUIDE</h1>
-
-  <p class="mt-6 text-gray-600">
-    Do not send files via WhatsApp as it reduces quality.
-  </p>
-
-  <div class="text-center mt-8">
-    <button onclick="printSection('guide')" class="bg-red-500 text-white px-6 py-2 rounded">
-      Print Guide
-    </button>
-  </div>
-</div>
-
-<!-- ================= THANK YOU ================= -->
-<div id="thankyou" class="doc bg-white p-8 rounded-xl shadow max-w-4xl mx-auto mb-10">
-  <h1 class="text-3xl font-bold text-center">THANK YOU</h1>
-
-  <p class="mt-6 text-gray-600 text-center">
-    We appreciate working with you.
-  </p>
-
-  <div class="text-center mt-8">
-    <button onclick="printSection('thankyou')" class="bg-red-500 text-white px-6 py-2 rounded">
-      Print Thank You
-    </button>
-  </div>
-</div>
-
-<!-- ================= SCRIPT ================= -->
+<!-- ================= UNIVERSAL PRINT ================= -->
 <script>
-function printSection(id) {
-  const content = document.getElementById(id).outerHTML;
+function printSection(id){
+  const el = document.getElementById(id);
+  const win = window.open('', '_blank');
 
-  const printWindow = window.open('', '_blank');
-
-  printWindow.document.open();
-  printWindow.document.write(`
+  win.document.write(`
     <html>
     <head>
       <title>Print</title>
-      <link href="https://cdn.tailwindcss.com" rel="stylesheet">
       <style>
-        body {
-          font-family: 'Inter', sans-serif;
-          padding: 20px;
-        }
+        body{font-family:Inter,sans-serif;padding:20px;}
+        *{box-shadow:none!important;}
       </style>
     </head>
-    <body>
-      ${content}
-    </body>
+    <body>${el.outerHTML}</body>
     </html>
   `);
 
-  printWindow.document.close();
-
-  printWindow.onload = () => {
-    printWindow.print();
-    printWindow.close();
-  };
+  win.document.close();
+  win.onload = () => { win.print(); win.close(); };
 }
 </script>
+
+<!-- ================= WELCOME ================= -->
+<div id="welcome-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">WELCOME</h1>
+<p class="text-center mt-3">Hi <span contenteditable="true">[Client Name]</span></p>
+
+<p class="mt-6 text-center text-gray-600" contenteditable="true">
+Thank you for choosing to work with us.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('welcome-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
+
+<!-- ================= AGREEMENT ================= -->
+<div id="agreement-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">CLIENT AGREEMENT</h1>
+
+<p class="mt-6 text-gray-600" contenteditable="true">
+This agreement outlines the services and terms.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('agreement-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
+
+<!-- ================= GUIDE ================= -->
+<div id="guide-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">CONTENT GUIDE</h1>
+
+<p class="mt-6 text-gray-600" contenteditable="true">
+Do not send files via WhatsApp.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('guide-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
+
+<!-- ================= COMPETITOR ================= -->
+<div id="competitor-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">COMPETITOR ANALYSIS</h1>
+
+<p class="mt-6 text-gray-600" contenteditable="true">
+Add competitor insights here.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('competitor-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
+
+<!-- ================= MONTHLY ================= -->
+<div id="monthly-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">MONTHLY REPORT</h1>
+
+<p class="mt-6 text-gray-600" contenteditable="true">
+Monthly performance summary.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('monthly-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
+
+<!-- ================= THANK YOU ================= -->
+<div id="thankyou-content" class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+<h1 class="text-3xl font-bold text-center">THANK YOU</h1>
+
+<p class="mt-6 text-gray-600 text-center" contenteditable="true">
+We appreciate working with you.
+</p>
+
+<div class="text-right mt-6 no-print">
+<button onclick="printSection('thankyou-content')" class="bg-red-500 text-white px-5 py-2 rounded">
+Print
+</button>
+</div>
+</div>
 
 </body>
 </html>
